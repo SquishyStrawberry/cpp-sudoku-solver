@@ -17,7 +17,6 @@ extern string LINE;
 extern string TWOWAY_LEFT_CONNECTOR;
 extern string TWOWAY_RIGHT_CONNECTOR;
  
-
 typedef vector<int> row_t;
 typedef vector<row_t> board_t;
 
@@ -26,7 +25,10 @@ class Sudoku {
     board_t board;
     Sudoku();
     Sudoku(board_t);
+    vector<int> getPossible(int, int);
+    string exportString();
     void print();
+    void advance();
 };
 
 #endif // _SUDOKU_HPP_

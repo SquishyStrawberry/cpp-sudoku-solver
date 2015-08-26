@@ -78,3 +78,66 @@ void Sudoku::print() {
     }
 }
 
+vector<int> Sudoku::getPossible(int y, int x) {
+    vector<bool> possibles = {true, true, true, true, true, true, true, true, true};
+    vector<int> possibles_actual;
+
+    // Take the possibles from the rows and columns
+    for (int i=0; i < board.size(); ++i) {
+        for (int j=0; j < board[i].size(); ++j) {
+            if (i == y || x == j) {
+                int val = board[i][j];
+                if (val != 0) possibles[val - 1] = false;
+            }
+        }
+    }
+
+    // Take the possibles from the box
+    while (y % BOX_SIZE != 0) --y;
+    while (x % BOX_SIZE != 0) --x;
+    for (int i=y; i < y + 3; ++i) {
+        for (int j=x; j < x + 3; ++j) {
+            int val = board[i][j];
+            if (val != 0) possibles[val - 1] = false;
+        }
+    }
+
+    for (int x=0; x < possibles.size(); ++x) {
+        if (possibles[x]) possibles_actual.push_back(x + 1);
+    }
+    return possibles_actual;
+}
+
+void Sudoku::advance() {    
+    board_t newBoard;
+    for (int i=0; i < board.size(); ++i) {
+        row_t row;
+        for (int j=0; j < board[i].size(); ++j) {
+            vector<int> possible = getPossible(i, j);
+            /*if (board[i][j] == 0) {
+                cout << i << ", " << j << ": ";
+                for (int i=0; i < possible.size(); ++i) {
+                    cout << possible[i];
+                    if (i < possible.size() - 1) {
+                        cout << ", ";
+                    }
+                }
+                cout << endl;
+            }*/
+            row.push_back(possible.size() == 1 && board[i][j] == 0 ? possible[0] : board[i][j]);
+        }
+        newBoard.push_back(row);
+    }
+    board = newBoard;
+}
+
+string Sudoku::exportString() {
+    string output = "";
+    for (auto i : board) {
+        for (auto j : i) {
+            output += j + '0';
+        }
+    }
+    return output;
+}
+
