@@ -25,10 +25,12 @@ class Sudoku {
     board_t board;
     Sudoku();
     Sudoku(board_t);
-    vector<int> getPossible(int, int);
+    Sudoku(string);
     string exportString();
-    void print();
+    vector<int> getPossible(int, int);
     void advance();
+    void print();
+    void solve();
 };
 
 #endif // _SUDOKU_HPP_

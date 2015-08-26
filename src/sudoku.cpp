@@ -17,6 +17,22 @@ string TWOWAY_RIGHT_CONNECTOR = "\u2524";
 
 Sudoku::Sudoku(board_t start_board) : board(start_board) {}
 
+Sudoku::Sudoku(string import_string) {
+    row_t row;
+    for (int i=0; i < import_string.length(); ++i) {
+        /*
+         * For each char in the string, if you take away the ascii value of 0
+         * You get the actual value of the char
+         * e.g. 49(ASCII value of 1) - 48 (Ascii value of 0) -> 1
+         */
+        row.push_back(import_string[i] - '0');
+        if (row.size() ==  BOARD_WIDTH) {
+            board.push_back(row);
+            row.clear();
+        };
+    }
+}
+
 Sudoku::Sudoku() {
     for (int i=0; i < BOARD_HEIGHT; ++i) {
         row_t row; 
@@ -114,16 +130,6 @@ void Sudoku::advance() {
         row_t row;
         for (int j=0; j < board[i].size(); ++j) {
             vector<int> possible = getPossible(i, j);
-            /*if (board[i][j] == 0) {
-                cout << i << ", " << j << ": ";
-                for (int i=0; i < possible.size(); ++i) {
-                    cout << possible[i];
-                    if (i < possible.size() - 1) {
-                        cout << ", ";
-                    }
-                }
-                cout << endl;
-            }*/
             row.push_back(possible.size() == 1 && board[i][j] == 0 ? possible[0] : board[i][j]);
         }
         newBoard.push_back(row);
@@ -139,5 +145,20 @@ string Sudoku::exportString() {
         }
     }
     return output;
+}
+
+void Sudoku::solve() {
+    string lastString = "";
+    string newString  = "";
+    while (true) {
+        advance();
+        newString = exportString();
+        if (lastString == newString) {
+            return;
+        }
+        else {
+            lastString = newString;
+        }
+    }
 }
 
