@@ -130,7 +130,17 @@ void Sudoku::advance() {
         row_t row;
         for (int j=0; j < board[i].size(); ++j) {
             vector<int> possible = getPossible(i, j);
-            row.push_back(possible.size() == 1 && board[i][j] == 0 ? possible[0] : board[i][j]);
+            if (board[i][j] == 0) {
+                if (possible.size() == 1) {
+                    row.push_back(possible[0]);
+                }
+                else {
+                    row.push_back(0);
+                }
+            }
+            else {
+                row.push_back(board[i][j]);
+            }
         }
         newBoard.push_back(row);
     }
